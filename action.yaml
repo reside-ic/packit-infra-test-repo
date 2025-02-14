@@ -1,0 +1,11 @@
+name: 'orderly'
+description: 'Action to run an orderly workflow on Packit.'
+inputs:
+  reports:
+    description: 'List of reports to run'
+
+runs:
+  using: "composite"
+  steps:
+    - run:
+        echo ${{ inputs.reports }}
