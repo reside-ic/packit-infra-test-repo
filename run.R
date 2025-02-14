@@ -1,3 +1,5 @@
+library(packit.client)
+
 run <- function(client, ref_name, sha, entry) {
   if (!is.na(Sys.getenv("CI", NA))) {
     cli::cli_text("::group::Running {entry$name}")
