@@ -15,11 +15,8 @@ jobs:
           extra-repositories: https://mrc-ide.r-universe.dev
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: cli, httr2
+          packages: cli, httr2, yaml
           dependencies: NA
-      - name: Execute tasks
-        shell: bash
-        run: Rscript run.R
 
       - uses: ./
         with:
