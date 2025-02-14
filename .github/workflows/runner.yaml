@@ -23,7 +23,7 @@ jobs:
 
       - uses: ./
         with:
-          # packit-url: https://packit.dide.ic.ac.uk/reside
+          packit-url: https://packit.dide.ic.ac.uk/reside
           reports: |
             - name: "incoming_data"
             - name: "explicit"

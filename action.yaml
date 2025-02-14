@@ -1,13 +1,19 @@
 name: 'orderly'
 description: 'Action to run an orderly workflow on Packit.'
 inputs:
+  packit-url:
+    description: "URL of a packit instance to be configured as a remote location"
+    required: false
   reports:
     type: 'string'
     description: 'List of reports to run'
+    default: "[]"
 
 runs:
   using: "composite"
   steps:
     - shell: bash
       run:
-        echo ${{ inputs.reports }}
+        data=$(mktemp)
+        echo '${{ inputs.reports }}' > $data
+        Rscript --verbose '${{ github.action_path }}/run.R' '${{ inputs.packit-url }}' "$run"
