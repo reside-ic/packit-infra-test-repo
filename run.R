@@ -113,6 +113,27 @@ authenticate <- function(url) {
   get_packit_token_service(url, github_token)
 }
 
+run <- function(url, token, ref_name, sha, entry) {
+  if (!is.na(Sys.getenv("CI", NA))) {
+    cli::cli_text("::group::Running {entry$name}")
+    withr::defer(cli::cli_text("::endgroup::"))
+  }
+  cli::cli_rule("Running {entry$name}")
+
+  task_id <- task_run(url, token, ref_name, sha, entry$name)
+  task_wait(url, token, task_id)
+  status <- task_status(url, token, task_id, include_logs = TRUE)
+
+  cli::cli_verbatim(unlist(status$logs))
+
+  if (status$status != "COMPLETE") {
+    cli::cli_abort("Task failed")
+  } else {
+    cli::cli_alert_success("Report ran successfully and produced packet {.href {status$packetId}")
+    cli::cli_alert_info("Packit is available at {.url {packet_url}}")
+  }
+}
+
 main <- function(args = commandArgs(trailingOnly = TRUE)) {
   url <- args[[1]]
   input <- args[[2]]
@@ -124,14 +145,7 @@ main <- function(args = commandArgs(trailingOnly = TRUE)) {
   data <- yaml::read_yaml(file = input)
 
   for (entry in data) {
-    task_id <- task_run(url, token, ref_name, sha, entry$name)
-    task_wait(url, token, task_id)
-    status <- task_status(url, token, task_id, include_logs = TRUE)
-    writeLines(unlist(status$logs))
-
-    if (status$status != "COMPLETE") {
-      cli::cli_abort("Task failed")
-    }
+    run(url, token, ref_name, sha, entry)
   }
 }
 
