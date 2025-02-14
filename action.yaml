@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - shell: bash
-      run:
+      run: |
         data=$(mktemp)
         echo '${{ inputs.reports }}' > $data
-        Rscript --verbose '${{ github.action_path }}/run.R' '${{ inputs.packit-url }}' "$run"
+        Rscript --verbose '${{ github.action_path }}/run.R' '${{ inputs.packit-url }}' "$data"
