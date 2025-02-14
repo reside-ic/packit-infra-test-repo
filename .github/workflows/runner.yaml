@@ -25,3 +25,8 @@ jobs:
             - name: "incoming_data"
             - name: "explicit"
             - name: "custom_metadata"
+              export: "${{ runner.temp }}/custom_metadata"
+
+      - uses: actions/upload-artifact@v4
+        name: "custom_metadata"
+        path: "${{ runner.temp }}/custom_metadata"

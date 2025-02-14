@@ -80,7 +80,7 @@ task_run <- function(url, token, branch, hash, name) {
 task_status <- function(url, token, task_id, include_logs = FALSE) {
   req <- httr2::request(url) |>
     httr2::req_auth_bearer_token(token) |>
-    httr2::req_url_path_append("packit/api/runner/status", task_id) |>
+    httr2::req_template("packit/api/runner/status/{task_id}") |>
     httr2::req_url_query(includeLogs = include_logs)
 
   httr2::req_perform(req) |>
@@ -113,6 +113,23 @@ authenticate <- function(url) {
   get_packit_token_service(url, github_token)
 }
 
+download_packet <- function(url, token, packet_id, path) {
+  metadata <- httr2::request(url) |>
+    httr2::req_auth_bearer_token(token) |>
+    httr2::req_template("packit/api/outpack/metadata/{packet_id}/json") |>
+    httr2::req_perform() |>
+    httr2::resp_body_json()
+
+  for (file in metadata$data$files) {
+    out <- fs::path(path, file$path)
+    fs::dir_create(dirname(out))
+    httr2::request(url) |>
+      httr2::req_auth_bearer_token(token) |>
+      httr2::req_template("packit/api/outpack/file/{hash}", hash = file$hash) |>
+      httr2::req_perform(out)
+  }
+}
+
 run <- function(url, token, ref_name, sha, entry) {
   if (!is.na(Sys.getenv("CI", NA))) {
     cli::cli_text("::group::Running {entry$name}")
@@ -129,8 +146,13 @@ run <- function(url, token, ref_name, sha, entry) {
   if (status$status != "COMPLETE") {
     cli::cli_abort("Task failed")
   } else {
-    cli::cli_alert_success("Report ran successfully and produced packet {.href {status$packetId}")
-    cli::cli_alert_info("Packit is available at {.url {packet_url}}")
+    packet_url <- glue::glue("{url}/{status$packetGroupName}/{status$packetId}")
+    cli::cli_alert_success("Report ran successfully and produced packet {status$packetId}")
+    cli::cli_alert_info("Packet is available at {.url {packet_url}}")
+  }
+
+  if (!is.null(entry$export)) {
+    download_packet(url, token, status$packetId, entry$export)
   }
 }
 
