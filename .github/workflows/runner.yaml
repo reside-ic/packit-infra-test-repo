@@ -19,4 +19,4 @@ jobs:
           dependencies: NA
       - name: Execute tasks
         shell: bash
-        run: Rscript --verbose 'run.R'
+        run: Rscript --verbose 'source("run.R", echo=TRUE)'

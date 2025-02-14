@@ -57,15 +57,11 @@ task_status <- function(task_id, include_logs = FALSE) {
     httr2::resp_body_json()
 }
 
-task_logs <- function(task_id) {
-  unlist(task_status(task_id, include_logs = TRUE)$logs)
-}
-
 task_wait <- function(task_id) {
   while (TRUE) {
     status <- task_status(task_id)
     if (status$status != "RUNNING") {
-      return(status)
+      return (status)
     }
     Sys.sleep(1)
   }
