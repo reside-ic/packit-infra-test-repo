@@ -77,7 +77,7 @@ task_run <- function(url, token, branch, hash, name) {
   task$taskId
 }
 
-task_status <- function(url, token, task_id, include_logs = FALSE) {
+task_status <- function(url, token, task_id, include_logs = NULL) {
   req <- httr2::request(url) |>
     httr2::req_auth_bearer_token(token) |>
     httr2::req_template("packit/api/runner/status/{task_id}") |>
@@ -134,8 +134,9 @@ run <- function(url, token, ref_name, sha, entry) {
   if (!is.na(Sys.getenv("CI", NA))) {
     cli::cli_text("::group::Running {entry$name}")
     withr::defer(cli::cli_text("::endgroup::"))
+  } else {
+    cli::cli_rule("Running {entry$name}")
   }
-  cli::cli_rule("Running {entry$name}")
 
   task_id <- task_run(url, token, ref_name, sha, entry$name)
   task_wait(url, token, task_id)
