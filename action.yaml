@@ -9,3 +9,4 @@ runs:
   steps:
     - run:
         echo ${{ inputs.reports }}
+        echo ${{ fromJSON(inputs.reports)[0] }}

@@ -20,3 +20,11 @@ jobs:
       - name: Execute tasks
         shell: bash
         run: Rscript -e 'source("run.R", echo=TRUE)'
+
+      - uses: ./
+        with:
+          # packit-url: https://packit.dide.ic.ac.uk/reside
+          reports:
+            - name: "incoming_data"
+            - name: "explicit"
+            - name: "custom_metadata"
