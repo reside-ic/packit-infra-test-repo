@@ -28,5 +28,6 @@ jobs:
               export: "${{ runner.temp }}/custom_metadata"
 
       - uses: actions/upload-artifact@v4
-        name: "custom_metadata"
-        path: "${{ runner.temp }}/custom_metadata"
+        with:
+          name: "custom_metadata"
+          path: "${{ runner.temp }}/custom_metadata"
