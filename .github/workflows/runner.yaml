@@ -24,7 +24,7 @@ jobs:
       - uses: ./
         with:
           # packit-url: https://packit.dide.ic.ac.uk/reside
-          reports:
+          reports: |
             - name: "incoming_data"
             - name: "explicit"
             - name: "custom_metadata"

@@ -2,6 +2,7 @@ name: 'orderly'
 description: 'Action to run an orderly workflow on Packit.'
 inputs:
   reports:
+    type: 'string'
     description: 'List of reports to run'
 
 runs:
@@ -9,4 +10,3 @@ runs:
   steps:
     - run:
         echo ${{ inputs.reports }}
-        echo ${{ fromJSON(inputs.reports)[0] }}
