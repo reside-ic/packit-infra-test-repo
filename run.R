@@ -61,7 +61,7 @@ task_wait <- function(task_id) {
   while (TRUE) {
     status <- task_status(task_id)
     if (status$status != "RUNNING") {
-      return (status)
+      return (invisible(status))
     }
     Sys.sleep(1)
   }

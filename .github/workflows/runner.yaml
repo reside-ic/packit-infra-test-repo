@@ -19,7 +19,7 @@ jobs:
           dependencies: NA
       - name: Execute tasks
         shell: bash
-        run: Rscript -e 'source("run.R", echo=TRUE)'
+        run: Rscript run.R
 
       - uses: ./
         with:
