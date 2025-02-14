@@ -2,12 +2,14 @@ name: 'orderly'
 description: 'Action to run an orderly workflow on Packit.'
 inputs:
   packit-url:
-    description: "URL of a packit instance to be configured as a remote location"
-    required: false
+    type: 'string'
+    description: 'URL of a packit instance'
+    required: true
+
   reports:
     type: 'string'
     description: 'List of reports to run'
-    default: "[]"
+    required: true
 
 runs:
   using: "composite"

@@ -15,9 +15,8 @@ jobs:
           extra-repositories: https://mrc-ide.r-universe.dev
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          packages: cli, httr2, yaml
+          packages: cli, yaml, plietar/packit.client
           dependencies: NA
-
       - uses: ./
         with:
           packit-url: https://packit.dide.ic.ac.uk/reside
